@@ -23,6 +23,4 @@ cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=/usr/local ..
 make -j7 # runs7 jobs in parallel
 sudo make install
 echo "Installation finished"
-cd ..
-cd ..
-
+cd ../..
