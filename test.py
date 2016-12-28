@@ -1,4 +1,4 @@
-
+#Adrian Rosebrock's guide - VIP
 # import the necessary packages
 from collections import deque
 import numpy as np
@@ -15,8 +15,8 @@ ap.add_argument("-b", "--buffer", type=int, default=32,
 args = vars(ap.parse_args())
 
 # ball in the HSV color space
-greenLower = (5, 50, 50)
-greenUpper = (15, 255, 255)
+orangeLower = (5, 50, 50)
+orangeUpper = (15, 255, 255)
  
 # initialize the list of tracked points, the frame counter,
 # and the coordinate deltas
@@ -41,10 +41,10 @@ while True:
 	blurred = cv2.GaussianBlur(frame, (11, 11), 0)
 	hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
  
-	# construct a mask for the color "green", then perform
+	# construct a mask for the color "orange", then perform
 	# a series of dilations and erosions to remove any small
 	# blobs left in the mask
-	mask = cv2.inRange(hsv, greenLower, greenUpper)
+	mask = cv2.inRange(hsv, orangeLower, orangeUpper)
 	mask = cv2.erode(mask, None, iterations=2)
 	mask = cv2.dilate(mask, None, iterations=2)
  
@@ -65,7 +65,7 @@ while True:
 		center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
  
 		# only proceed if the radius meets a minimum size
-		if radius > 10:
+		if radius > 10: #dont know what the minimum area should be currently---(change later on)
 			# draw the circle and centroid on the frame,
 			# then update the list of tracked points
 			cv2.circle(frame, (int(x), int(y)), int(radius),
@@ -127,4 +127,5 @@ while True:
  
 	# if the 'q' key is pressed, stop the loop
 	if key == ord("q"):
+                cv2.destroyAllWindows()
 		break

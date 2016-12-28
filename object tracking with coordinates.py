@@ -1,3 +1,4 @@
+#Adrian Rosebrock's guide - VIP
 
 # import the necessary packages
 from collections import deque
@@ -6,7 +7,7 @@ import argparse
 import imutils
 import cv2
 
-# construct the argument parse and parse the arguments
+q# construct the argument parse and parse the argumentsq
 ap = argparse.ArgumentParser()
 ap.add_argument("-v", "--video",
 	help="path to the (optional) video file")
@@ -15,16 +16,8 @@ ap.add_argument("-b", "--buffer", type=int, default=32,
 args = vars(ap.parse_args())
 
 # ball in the HSV color space
-greenLower = (0, 100, 100)
-greenUpper = (20, 255, 255)
-
-
-
-
-
-
-
-
+orangeLower = (0, 100, 100)
+orangeUpper = (20, 255, 255)
 
 
 
@@ -60,12 +53,6 @@ focalLength = (marker[1][0] * KNOWN_DISTANCE) / KNOWN_WIDTH
 print "focal length = ",focalLength
 
 
-
-
-
-
-
-
 # initialize the list of tracked points, the frame counter,
 # and the coordinate deltas
 pts = deque(maxlen=args["buffer"])
@@ -83,28 +70,10 @@ while True:
 	if args.get("video") and not grabbed:
 		break
 
-
-
-
-
-
-
-
 	marker = find_marker(frame)
 	perWidth = marker[1][0]
 	distance1 = distance_to_camera(KNOWN_WIDTH, focalLength, perWidth)
 	print distance1, "(in cm)"
-
-
-
-
-
-
-
-
-
-
-
 
 
 	# resize the frame, blur it, and convert it to the HSV
@@ -113,10 +82,10 @@ while True:
 	blurred = cv2.GaussianBlur(frame, (11, 11), 0)
 	hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
  
-	# construct a mask for the color "green", then perform
+	# construct a mask for the color "orange", then perform
 	# a series of dilations and erosions to remove any small
 	# blobs left in the mask
-	mask = cv2.inRange(hsv, greenLower, greenUpper)
+	mask = cv2.inRange(hsv, orangeLower, orangeUpper)
 	mask = cv2.erode(mask, None, iterations=2)
 	mask = cv2.dilate(mask, None, iterations=2)
  
@@ -160,6 +129,7 @@ while True:
 			# text variables
 			dX = pts[-10][0] - pts[i][0]
 			dY = pts[-10][1] - pts[i][1]
+			#print required details to screen for testing
 			(dirX, dirY) = ("", "")
 			cv2.putText(frame, "X: {}, Y: {}".format(pts[i][0], pts[i][1]),
 		(10, frame.shape[0] - 100), cv2.FONT_HERSHEY_SIMPLEX,
@@ -187,7 +157,7 @@ while True:
 					# otherwise, compute the thickness of the line and
 		# draw the connecting lines
 		thickness = int(np.sqrt(args["buffer"] / float(i + 1)) * 2.5)
-		cv2.line(frame, pts[i - 1], pts[i], (0, 0, 255), thickness)
+		cv2.line(frame, pts[i - 1], pts[i], (0, 0, 255), thickness) #red line to show direction of movement
  
 	# show the movement deltas and the direction of movement on
 	# the frame
@@ -204,4 +174,5 @@ while True:
  
 	# if the 'q' key is pressed, stop the loop
 	if key == ord("q"):
+                cv2.destroyAllWindows()
 		break
